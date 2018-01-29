@@ -22,7 +22,7 @@ echo "IP SAME,SIKP UPDATE."
 exit
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
-UA="User-Agent: 03KDDNS Client $Email"
+UA="User-Agent: 03K DDNS Client/1.0.0 ($Email)"
 Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}" -H "${UA}")"
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
