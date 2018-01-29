@@ -13,7 +13,7 @@ api的ID和Token可以在后台获取：
 ![输入 Token 名称](https://support.dnspod.cn/Uploads/api-tokens-2.png)     
 >点击 “确定” 之后，Token 创建成功，会弹出如下提示框：
 ![Token 创建成功](https://support.dnspod.cn/Uploads/api-tokens-3.png)
-### dnspod_ddns.sh
+### **dnspod_ddns.sh**
 #### 参数说明  
 参数|填写说明
 :-:|:-
@@ -24,7 +24,7 @@ host|主机记录名，例如www.baidu.com的主机记录名是www，image.www.w
 Email|填写你的邮箱。（根据API规范要求）
 CHECKURL|用于检查自己的外网IP是什么的网址，注释掉该参数会跳过所有检查（仅验证域名记录是否存在）直接执行更新记录（会导致高频率调用更新）；建议的备选CHECKURL：```http://ip.3322.org``` ```http://myip.ipip.net``` ```http://ip.xdty.org```
 OUT|指定使用某个网卡设备进行联网通讯（默认被注释掉）。注意，一些系统的负载均衡功能可能会导致该参数无效。推荐使用```ip a```命令查看网卡设备名称。
-#### 推荐的部署方法
+#### **推荐的部署方法**
 把如上所述的参数填好即可。  
 本脚本没有自带循环，因为linux平台几乎都有Crontab（计划任务），利用计划任务可以实现开机启动循环执行脚本并设定循环频率。  
 >**命令参考**  
@@ -44,7 +44,7 @@ OUT|指定使用某个网卡设备进行联网通讯（默认被注释掉）。�
 本脚本**不会**自动创建子域名，请务必先到后台添加一个随意的子域名A记录，否则会提示No Record；  
 如果你看到**API usage is limited**的报错，是由于调用API频率过高账号被冻结（一小时后解封）
 
-### dnspod_ddns_line.sh
+### **dnspod_ddns_line.sh**
 仅说明与上面脚本参数不同的地方。  
 因该脚本是用于获取网卡设备ip，所以没有CHECKURL参数。  
 #### 参数说明  
@@ -52,6 +52,6 @@ OUT|指定使用某个网卡设备进行联网通讯（默认被注释掉）。�
 :-:|:-
 |DEV | 从网卡设备（例如eht0）上获取ip，并与DNS记录比对更新|
 
-### 关于
+### **关于**
 https://03k.org/dnspod-ddns-with-bashshell.html
 
