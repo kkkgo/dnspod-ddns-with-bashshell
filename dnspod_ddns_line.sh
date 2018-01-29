@@ -1,4 +1,4 @@
-#CloudXNS DDNS with BashShell
+#Dnspod DDNS with BashShell
 #Github:https://github.com/lixuy/dnspod-ddns-with-bashshell
 #More: https://03k.org/dnspod-ddns-with-bashshell.html
 #CONF START
