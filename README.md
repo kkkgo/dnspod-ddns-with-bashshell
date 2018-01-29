@@ -1,6 +1,6 @@
 # Dnspod-DDNS-with-BashShell
-利用Dnspod的api和shell脚本搭建自己的动态域名服务。  
-应friends要求写的，dnspod的限制比较多，对调用次数比较小气，频次高了（API文档说的是一小时5次）就会冻结API一小时，返回API usage is limited的报错。所以本脚本进行多次对比确保减少API调用。  
+利用Dnspod的api和shell脚本搭建自己的动态域名服务。如果你使用这个脚本，建议点watch以获取更新通知。  
+应friends要求写的，dnspod的限制比较多，对调用次数比较小气，频次高了（API文档说的是一小时5次）就会冻结API一小时，返回API usage is limited的报错。所以本脚本进行多次对比确保减少API调用。  
 CloudXns另见：https://github.com/lixuy/CloudXNS-DDNS-with-BashShell  
 https://github.com/lixuy/CloudXNS-DDNS-with-PowerShell  
 ## 使用方法
