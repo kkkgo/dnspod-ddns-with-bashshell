@@ -14,7 +14,7 @@ DEV="eth0"
 date
 IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
 LOCALIP=$(ping $DDNS -c1|grep -Eo "$IPREX"|tail -n1)
-DEVIP=$(ip addr show $OUT|grep -Eo "$IPREX"|head -n1)
+DEVIP=$(ip addr show $DEV|grep -Eo "$IPREX"|head -n1)
 echo "[DNS IP]:$LOCALIP"
 echo "[$OUT IP]:$DEVIP"
 if [ "$LOCALIP" == "$DEVIP" ];then
