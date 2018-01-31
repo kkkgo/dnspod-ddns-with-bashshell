@@ -1,7 +1,8 @@
 # Dnspod-DDNS-with-BashShell
 利用Dnspod的api和shell脚本搭建自己的动态域名服务。如果你使用这个脚本，建议点watch以获取更新通知。  
-应friends要求写的，dnspod的限制比较多，对调用次数比较小气，频次高了（API文档说的是一小时5次）就会冻结API一小时，返回API usage is limited的报错。所以本脚本进行多次对比确保减少API调用。  
-CloudXns另见：https://github.com/lixuy/CloudXNS-DDNS-with-BashShell  
+应friends要求写的，dnspod的限制比较多，对调用次数比较小气，频次高了（API文档说的是一小时5次）就会冻结API一小时，返回API usage is limited的报错。所以本脚本进行多次对比确保减少API调用。  
+>基于CloudXns的DDNS脚本另见：  
+https://github.com/lixuy/CloudXNS-DDNS-with-BashShell  
 https://github.com/lixuy/CloudXNS-DDNS-with-PowerShell  
 ## 使用方法
 本脚本分为两个版本，一个是获取自己外网ip的版本dnspod_ddns.sh，一个是直接获取自己网卡设备上的ip的版本dnspod_ddns_line.sh（对于多拨或者路由器网关用户适用）。
@@ -19,11 +20,11 @@ api的ID和Token可以在后台获取：
 :-:|:-
 |API_ID | 在个人中心后台的安全设置里面获取ID|
 API_Token|在个人中心后台的安全设置里面获取Token
-domain| 你所注册的主域名，例如baidu.com，qq.com，china.edu.cn，example.com
-host|主机记录名，例如www.baidu.com的主机记录名是www，image.www.weibo.com的主机记录是image.www，home.example.com的主机记录名是home
+domain| 你所注册的主域名，例如```baidu.com```，```qq.com```，```china.edu.cn```，```example.com```
+host|主机记录名，例如```www.baidu.com```的主机记录名是```www```，```image.www.weibo.com```的主机记录是```image.www```，```home.example.com```的主机记录名是```home```
 Email|填写你的邮箱。（根据API规范要求）
 CHECKURL|用于检查自己的外网IP是什么的网址，注释掉该参数会跳过所有检查（仅验证域名记录是否存在）直接执行更新记录（会导致高频率调用更新）；建议的备选CHECKURL：```http://ip.3322.org``` ```http://myip.ipip.net``` ```http://ip.xdty.org```
-OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。注意，一些系统的负载均衡功能可能会导致该参数无效。推荐使用```ip a```命令查看网卡设备名称。
+OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。注意，一些系统的负载均衡功能可能会导致该参数无效。推荐使用```ip a```命令或者```ifconfig```命令查看网卡设备名称。
 #### **推荐的部署方法**
 把如上所述的参数填好即可。  
 本脚本没有自带循环，因为linux平台几乎都有Crontab（计划任务），利用计划任务可以实现开机启动循环执行脚本并设定循环频率。  
@@ -50,7 +51,7 @@ OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。�
 #### 参数说明  
 参数|填写说明
 :-:|:-
-|DEV | 从网卡设备（例如eht0）上获取ip，并与DNS记录比对更新。推荐使用```ip a```命令查看网卡设备名称。|
+|DEV | 从网卡设备（例如eht0）上获取ip，并与DNS记录比对更新。推荐使用```ip a```命令```ifconfig```命令查看网卡设备名称。|
 
 ### **关于**
 https://03k.org/dnspod-ddns-with-bashshell.html
