@@ -20,7 +20,7 @@ DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
 echo "[DNS IP]:$DNSIP"
 echo "[DEV IP]:$DEVIP"
 if [ "$DNSIP" == "$DEVIP" ];then
-echo "IP SAME IN DNS,SIKP UPDATE."
+echo "IP SAME IN DNS,SKIP UPDATE."
 exit
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
@@ -30,7 +30,7 @@ iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
 if [ "$record_ip" == "$DEVIP" ];then
-echo "IP SAME,SIKP UPDATE."
+echo "IP SAME,SKIP UPDATE."
 exit
 fi
 record_id=$(echo ${Record#*records}|cut -d'"' -f5)
