@@ -29,8 +29,9 @@ Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST 
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
+echo "[API IP]:$record_ip"
 if [ "$record_ip" == "$DEVIP" ];then
-echo "IP SAME,SKIP UPDATE."
+echo "IP SAME IN API,SKIP UPDATE."
 exit
 fi
 record_id=$(echo ${Record#*records}|cut -d'"' -f5)
