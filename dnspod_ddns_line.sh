@@ -20,7 +20,7 @@ DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
 echo "[DNS IP]:$DNSIP"
 echo "[DEV IP]:$DEVIP"
 if [ "$DNSIP" == "$DEVIP" ];then
-echo "IP SAME,SIKP UPDATE."
+echo "IP SAME IN DNS,SIKP UPDATE."
 exit
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
