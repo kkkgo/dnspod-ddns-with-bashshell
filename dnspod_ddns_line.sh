@@ -13,12 +13,12 @@ DEV="eth0"
 
 date
 IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
-dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
-DNSIP=$($dnscmd $host.$domain|grep -Eo "$IPREX"|tail -n1)
 ipcmd="ip addr show";type ip >/dev/null 2>&1||ipcmd="ifconfig"
 DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
-echo "[DNS IP]:$DNSIP"
 echo "[DEV IP]:$DEVIP"
+dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
+DNSIP=$($dnscmd $host.$domain|grep -Eo "$IPREX"|tail -n1)
+echo "[DNS IP]:$DNSIP"
 if [ "$DNSIP" == "$DEVIP" ];then
 echo "IP SAME IN DNS,SKIP UPDATE."
 exit
