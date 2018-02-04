@@ -20,7 +20,7 @@ URLIP=$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s $CHECKURL|
 echo "[DNS IP]:$DNSIP"
 echo "[URL IP]:$URLIP"
 if [ "$DNSIP" == "$URLIP" ];then
-echo "IP SAME,SIKP UPDATE."
+echo "IP SAME IN API,SIKP UPDATE."
 exit
 fi
 fi
