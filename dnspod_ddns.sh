@@ -30,6 +30,7 @@ Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST 
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
+echo "[API IP]:$record_ip"
 if [ "$record_ip" == "$URLIP" ];then
 echo "IP SAME IN API,SIKP UPDATE."
 exit
