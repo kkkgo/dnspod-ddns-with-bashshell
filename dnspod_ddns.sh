@@ -40,7 +40,7 @@ record_line_id=$(echo ${Record#*line_id}|cut -d'"' -f3)
 echo Start DDNS update...
 ddns="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}" -H "${UA}")"
 ddns_result="$(echo ${ddns#*message\"}|cut -d'"' -f2)"
-echo -n "DNS upadte result:$ddns_result "
+echo -n "DDNS upadte result:$ddns_result "
 echo $ddns|grep -Eo "$IPREX"|tail -n1
 else echo -n Get $host.$domain error :
 echo $(echo ${Record#*message\"})|cut -d'"' -f2
