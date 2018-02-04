@@ -20,7 +20,7 @@ URLIP=$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s $CHECKURL|
 echo "[DNS IP]:$DNSIP"
 echo "[URL IP]:$URLIP"
 if [ "$DNSIP" == "$URLIP" ];then
-echo "IP SAME IN API,SIKP UPDATE."
+echo "IP SAME IN DNS,SIKP UPDATE."
 exit
 fi
 fi
@@ -31,7 +31,7 @@ iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
 if [ "$record_ip" == "$URLIP" ];then
-echo "IP SAME,SIKP UPDATE."
+echo "IP SAME IN API,SIKP UPDATE."
 exit
 fi
 record_id=$(echo ${Record#*records}|cut -d'"' -f5)
