@@ -1,13 +1,13 @@
 # Dnspod-DDNS-with-BashShell
 利用Dnspod的api和shell脚本搭建自己的动态域名服务。如果你使用这个脚本，建议点watch以获取更新通知。  
 应friends要求写的，~~dnspod的限制比较多，对调用次数比较小气，频次高了（API文档说的是一小时5次）就会冻结API一小时，返回API usage is limited的报错，所以本脚本进行多次对比确保减少API调用~~（按照本脚本的逻辑理论上和实测正常使用不可能超过限制，请放心使用！）  
->基于CloudXns的DDNS脚本另见：  
+>用于CloudXNS的DDNS脚本另见：  
 https://github.com/lixuy/CloudXNS-DDNS-with-BashShell  
 https://github.com/lixuy/CloudXNS-DDNS-with-PowerShell  
 ## 使用方法
 本脚本分为两个版本，一个是获取自己外网ip的版本dnspod_ddns.sh，一个是直接获取自己网卡设备上的ip的版本dnspod_ddns_line.sh（对于多拨或者路由器网关用户适用）。
-### 获取api的ID和Token
-api的ID和Token可以在后台获取：  
+### 获取API的ID和Token
+API的ID和Token可以在后台获取：  
 >创建一个 Token，依次点击 用户中心 -> 安全设置 -> API Token：
 ![创建一个 Token](https://support.dnspod.cn/Uploads/api-tokens-1.png)
 >点击创建一个 Token，输入 Token 名称即可，名称仅用来标记 Token，方便用户管理 Token ，不参与鉴权。
