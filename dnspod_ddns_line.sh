@@ -17,7 +17,11 @@ ipcmd="ip addr show";type ip >/dev/null 2>&1||ipcmd="ifconfig"
 DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
 echo "[DEV IP]:$DEVIP"
 dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
-DNSIP=$($dnscmd $host.$domain|grep -Eo "$IPREX"|tail -n1)
+DNSTEST=$($dnscmd $DOMAIN)
+if [ "$?" == 0 ];then
+DNSIP=$(echo $DNSTEST|grep -Eo "$IPREX"|tail -n1)
+else DNSIP="Get $DOMAIN DNS Failed."
+fi
 echo "[DNS IP]:$DNSIP"
 if [ "$DNSIP" == "$DEVIP" ];then
 echo "IP SAME IN DNS,SKIP UPDATE."
