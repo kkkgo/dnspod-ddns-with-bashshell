@@ -39,7 +39,7 @@ if [ "$record_ip" == "$URLIP" ];then
 echo "IP SAME IN API,SKIP UPDATE."
 exit
 fi
-record_id=$(echo ${Record#*records}|cut -d'"' -f5)
+record_id=$(echo ${Record#*\"records\"\:\[\{\"id\"}|cut -d'"' -f2)
 record_line_id=$(echo ${Record#*line_id}|cut -d'"' -f3)
 echo Start DDNS update...
 ddns="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}" -H "${UA}")"
