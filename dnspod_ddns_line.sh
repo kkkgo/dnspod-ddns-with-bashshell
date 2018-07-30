@@ -17,10 +17,10 @@ ipcmd="ip addr show";type ip >/dev/null 2>&1||ipcmd="ifconfig"
 DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
 echo "[DEV IP]:$DEVIP"
 dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
-DNSTEST=$($dnscmd $DOMAIN)
+DNSTEST=$($dnscmd $host.$domain)
 if [ "$?" == 0 ];then
 DNSIP=$(echo $DNSTEST|grep -Eo "$IPREX"|tail -n1)
-else DNSIP="Get $DOMAIN DNS Failed."
+else DNSIP="Get $host.$domain DNS Failed."
 fi
 echo "[DNS IP]:$DNSIP"
 if [ "$DNSIP" == "$DEVIP" ];then
