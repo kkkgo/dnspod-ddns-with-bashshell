@@ -17,10 +17,10 @@ IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0
 URLIP=$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s $CHECKURL|grep -Eo "$IPREX"|tail -n1)
 echo "[URL IP]:$URLIP"
 dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
-DNSTEST=$($dnscmd $DOMAIN)
+DNSTEST=$($dnscmd $host.$domain)
 if [ "$?" == 0 ];then
 DNSIP=$(echo $DNSTEST|grep -Eo "$IPREX"|tail -n1)
-else DNSIP="Get $DOMAIN DNS Failed."
+else DNSIP="Get $host.$domain DNS Failed."
 fi
 echo "[DNS IP]:$DNSIP"
 if [ "$DNSIP" == "$URLIP" ];then
