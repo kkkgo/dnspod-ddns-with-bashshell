@@ -7,7 +7,7 @@ API_Token=abcdefghijklmnopq2333333
 domain=example.com
 host=home
 Email=yourmail@example.com
-CHECKURL="http://ip.qq.com"
+CHECKURL="http://ip.03k.org"
 #OUT="pppoe"
 #CONF END
 . /etc/profile
