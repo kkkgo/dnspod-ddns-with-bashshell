@@ -36,7 +36,7 @@ iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
 echo "[API IP]:$record_ip"
-if [ "$record_ip" == "$URLIP" ]||[ "$record_ip" == "$DNSIP" ];then
+if [ "$record_ip" == "$URLIP" ];then
 echo "IP SAME IN API,SKIP UPDATE."
 exit
 fi
