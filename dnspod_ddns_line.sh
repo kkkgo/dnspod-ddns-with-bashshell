@@ -1,5 +1,5 @@
 #Dnspod DDNS with BashShell
-#Github:https://github.com/lixuy/dnspod-ddns-with-bashshell
+#Github:https://github.com/kkkgo/dnspod-ddns-with-bashshell
 #More: https://03k.org/dnspod-ddns-with-bashshell.html
 #CONF START
 API_ID=12345
