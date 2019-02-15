@@ -31,7 +31,7 @@ exit
 fi
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
-Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
+Record="$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
