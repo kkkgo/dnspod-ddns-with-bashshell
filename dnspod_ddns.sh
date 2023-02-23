@@ -1,52 +1,60 @@
 #Dnspod DDNS with BashShell
 #Github:https://github.com/kkkgo/dnspod-ddns-with-bashshell
-#More: https://03k.org/dnspod-ddns-with-bashshell.html
+#More: https://blog.03k.org/post/dnspod-ddns-with-bashshell.html
 #CONF START
-API_ID=12345
+API_ID=123456
 API_Token=abcdefghijklmnopq2333333
+# myhome.example.com
 domain=example.com
-host=home
-CHECKURL="http://ip.03k.org"
+sub_domain=myhome
+CHECKURL="http://ipsu.03k.org"
 #OUT="pppoe"
 #CONF END
-. /etc/profile
-date
+if ls /etc/profile 2>&1 > /dev/null;then
+    . /etc/profile
+fi
+date +"%Y-%m-%d %H:%M.%S %Z"
+
 if (echo $CHECKURL |grep -q "://");then
-IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
-URLIP=$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s $CHECKURL|grep -Eo "$IPREX"|tail -n1)
-if (echo $URLIP |grep -qEvo "$IPREX");then
-URLIP="Get $DOMAIN URLIP Failed."
+	IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+	URLIP=$(curl -4ks $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) $CHECKURL|grep -Eo "$IPREX"|tail -n1)
+	if echo $URLIP|grep -qEvo "$IPREX";then
+		URLIP="Get $sub_domain.$domain URLIP Failed.["$CHECKURL"]"
+	fi
+	echo "[URL IP]:$URLIP"
+	DNSTEST=$(curl -4kvs $sub_domain.$domain -m 1 2>&1|grep -Eo "$IPREX"|head -1)
+	if echo $DNSTEST|grep -Eqo "$IPREX";then
+		DNSIP=$DNSTEST
+	else DNSIP="Get $sub_domain.$domain DNS Failed."
+	fi
+	echo "[DNS IP]:$DNSIP"
+	if [ "$DNSIP" = "$URLIP" ];then
+	echo "IP SAME IN DNS,SKIP UPDATE."
+	exit
+	fi
 fi
-echo "[URL IP]:$URLIP"
-dnscmd="nslookup";type nslookup >/dev/null 2>&1||dnscmd="ping -c1"
-DNSTEST=$($dnscmd $host.$domain)
-if [ "$?" != 0 ]&&[ "$dnscmd" == "nslookup" ]||(echo $DNSTEST |grep -qEvo "$IPREX");then
-DNSIP="Get $host.$domain DNS Failed."
-else DNSIP=$(echo $DNSTEST|grep -Eo "$IPREX"|tail -n1)
+
+login_token=${API_ID},${API_Token}
+token="login_token=${login_token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${sub_domain}"
+Record="$(curl -4ks $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -X POST https://dnsapi.cn/Record.List -d "${token}")"
+if echo $Record|grep -qEo "Operation successful";then
+	record_ip=$(echo $Record|grep -Eo "$IPREX"|head -1)
+	echo "[API IP]:$record_ip"
+
+	if [ "$record_ip" = "$URLIP" ];then
+	echo "IP SAME IN API,SKIP UPDATE."
+	exit
+	fi
+	
+	# DDNS UPDATE
+	record_id=$(echo $Record|grep -Eo '"records"[:\[{" ]+"id"[:" ]+[0-9]+'|grep -Eo [0-9]+)
+	record_line_id=$(echo $Record|grep -Eo 'line_id[": ]+[0-9]+'|grep -Eo [0-9]+)
+	echo Start DDNS update...
+	ddns="$(curl -4ks $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}")"
+	ddns_result=$(echo $ddns|grep -Eo 'message[": ]+[A-Za-z0-9. -]+"'|grep -Eo '"[A-Za-z0-9. -]+"')
+	result="DDNS "$ddns_result" - "$sub_domain.$domain"["$record_ip"]->["$(echo $ddns|grep -Eo "$IPREX"|tail -n1)"]"
+else
+    ddns_result=$(echo $Record|grep -Eo 'message[": ]+[A-Za-z0-9. -]+"'|grep -Eo '"[A-Za-z0-9. -]+"')	
+	result="Get "$sub_domain.$domain" error :"$ddns_result
 fi
-echo "[DNS IP]:$DNSIP"
-if [ "$DNSIP" == "$URLIP" ];then
-echo "IP SAME IN DNS,SKIP UPDATE."
-exit
-fi
-fi
-token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
-Record="$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
-iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
-if [ "$iferr" == "1" ];then
-record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
-echo "[API IP]:$record_ip"
-if [ "$record_ip" == "$URLIP" ];then
-echo "IP SAME IN API,SKIP UPDATE."
-exit
-fi
-record_id=$(echo ${Record#*\"records\"\:\[\{\"id\"}|cut -d'"' -f2)
-record_line_id=$(echo ${Record#*line_id}|cut -d'"' -f3)
-echo Start DDNS update...
-ddns="$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}")"
-ddns_result="$(echo ${ddns#*message\"}|cut -d'"' -f2)"
-echo -n "DDNS upadte result:$ddns_result "
-echo $ddns|grep -Eo "$IPREX"|tail -n1
-else echo -n Get $host.$domain error :
-echo $(echo ${Record#*message\"})|cut -d'"' -f2
-fi
+echo $result
