@@ -11,6 +11,8 @@ sub_domain=myhome
 CHECKURL="http://ipsu.03k.org"
 #OUT="pppoe"
 #CONF END
+
+# INIT
 if ls /etc/profile 2>&1 > /dev/null;then
     . /etc/profile
 fi
@@ -20,6 +22,7 @@ if [ "$sub_domain" = "@" ];then
 	HOST=$domain
 fi
 
+# DNS IP
 if (echo $CHECKURL |grep -q "://");then
 	IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
 	URLIP=$(curl -4ks $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) $CHECKURL|grep -Eo "$IPREX"|tail -n1)
@@ -39,6 +42,7 @@ if (echo $CHECKURL |grep -q "://");then
 	fi
 fi
 
+# API IP
 login_token=${API_ID},${API_Token}
 token="login_token=${login_token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${sub_domain}"
 Record="$(curl -4ks $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -X POST https://dnsapi.cn/Record.List -d "${token}")"
@@ -51,7 +55,7 @@ if echo $Record|grep -qEo "Operation successful";then
 	exit
 	fi
 	
-	# DDNS UPDATE
+# DDNS UPDATE
 	record_id=$(echo $Record|grep -Eo '"records"[:\[{" ]+"id"[:" ]+[0-9]+'|grep -Eo [0-9]+|head -1)
 	record_line_id=$(echo $Record|grep -Eo 'line_id[": ]+[0-9]+'|grep -Eo [0-9]+|head -1)
 	echo Start DDNS update...
