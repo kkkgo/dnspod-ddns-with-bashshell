@@ -31,7 +31,7 @@ if (echo $CHECKURL |grep -q "://");then
 	fi
 	echo "[URL IP]:$URLIP"
 	DNSTEST=$(curl -4kvs $HOST -m 1 2>&1|grep -Eo "$IPREX"|head -1)
-    DNSIP="Get $HOST DNS Failed."
+	DNSIP="Get $HOST DNS Failed."
 	if echo $DNSTEST|grep -Eqo "$IPREX";then
 		DNSIP=$DNSTEST
 	fi
