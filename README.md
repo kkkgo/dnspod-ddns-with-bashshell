@@ -16,18 +16,18 @@ API的ID和Token可以在后台获取：
 :-:|:-
 |API_ID | 在个人中心后台的安全设置里面获取ID|
 API_Token|在个人中心后台的安全设置里面获取Token
-domain| 你所注册的主域名，例如```baidu.com```，```qq.com```，```china.edu.cn```，```example.com```
-sub_domain|主机记录名，例如```www.baidu.com```的主机记录名是```www```，```image.www.weibo.com```的主机记录是```image.www```，```myhome.example.com```的主机记录名是```myhome```
-CHECKURL|用于检查自己的外网IP是什么的网址，注释掉该参数会跳过本地DNS检查比对，直接执行（验证域名记录是否存在以及记录是否重复后）更新；建议的备选CHECKURL：```http://ipsu.03k.org``` ```https://www.cloudflare.com/cdn-cgi/trace```
-OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。注意，一些系统的负载均衡功能可能会导致该参数无效。推荐使用```ip a```命令或者```ifconfig```命令查看网卡设备名称。
+domain| 你所注册的主域名，例如`baidu.com`，`qq.com`，`china.edu.cn`，`example.com`
+sub_domain|主机记录名，你在管理后台点点点鼠标添加的[主机记录]是什么就是什么，例如`www.baidu.com`的主机记录名是`www`，`image.www.weibo.com`的主机记录是`image.www`，`myhome.example.com`的主机记录名是`myhome`，根域名记录名是`@`，如果是泛域名建议使用子域名记录cname套娃处理     
+CHECKURL|用于检查自己的外网IP是什么的网址，注释掉该参数会跳过本地DNS检查比对，直接执行（验证域名记录是否存在以及记录是否重复后）更新；建议的备选CHECKURL：`http://ipsu.03k.org` `https://www.cloudflare.com/cdn-cgi/trace` `http://myip.ipip.net`
+OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。注意，一些系统的负载均衡功能可能会导致该参数无效。推荐使用`ip a`命令或者`ifconfig`命令查看网卡设备名称。
 #### **推荐的部署方法**
 把如上所述的参数填好即可。  
 本脚本没有自带循环，因为linux平台几乎都有Crontab（计划任务），利用计划任务可以实现开机启动、循环执行脚本、并设定循环频率而无需常驻后台。  
 #### 命令参考 #####    
-- 假设脚本已经填写好参数并加了可执行权限（```chmod +x ./dnspod_ddns.sh```），并位于```/root/dnspod_ddns.sh```:  
-新建计划任务输入```crontab -e```  
+- 假设脚本已经填写好参数并加了可执行权限（`chmod +x ./dnspod_ddns.sh`），并位于`/root/dnspod_ddns.sh`:  
+新建计划任务输入`crontab -e`  
 按a进入编辑模式，输入   
- ```*/10 * * * * /root/dnspod_ddns.sh &> /dev/null```  
+ `*/10 * * * * /root/dnspod_ddns.sh &> /dev/null`   
 意思是每隔10分钟执行/root/dnspod_ddns.sh并屏蔽输出日志。当然，如果你需要记录日志可以直接重定向至保存路径。 
 然后按Esc，输入:wq回车保存退出即可。  
 更多关于Crontab的使用方法此处不再详述。  
@@ -48,7 +48,7 @@ OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。�
 #### 参数说明
 参数|填写说明
 :-:|:-
-|DEV | 从网卡设备（例如eht0）上获取ip，并与DNS记录比对更新。推荐使用```ip a```命令```ifconfig```命令查看网卡设备名称。  
+|DEV | 从网卡设备（例如eht0）上获取ip，并与DNS记录比对更新。推荐使用`ip a`命令`ifconfig`命令查看网卡设备名称。  
 
 ### 日志参考
 现象|说明
