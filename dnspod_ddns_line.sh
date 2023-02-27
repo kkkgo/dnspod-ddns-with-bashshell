@@ -13,16 +13,14 @@ DEV="eth0"
 #CONF END
 
 # INIT
-if ls /etc/profile 2>&1 > /dev/null;then
-    . /etc/profile
-fi
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin:/opt/sbin:$PATH"
 date +"%Y-%m-%d %H:%M.%S %Z"
 HOST=$sub_domain.$domain
 if [ "$sub_domain" = "@" ];then
 	HOST=$domain
 fi
 
-# DEV IP
+# DNS IP <-> DEV IP
 IPREX='([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.([0-9]{1,2}|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
 ipcmd="ip addr show";type ip >/dev/null 2>&1||ipcmd="ifconfig"
 DEVIP=$($ipcmd $DEV|grep -Eo "$IPREX"|head -n1)
@@ -30,10 +28,25 @@ if (echo $DEVIP |grep -qEvo "$IPREX");then
     DEVIP="Get $DOMAIN DEVIP Failed."
 fi
 echo "[DEV IP]:$DEVIP"
-DNSTEST=$(curl -4kvs $HOST -m 1 2>&1|grep -Eo "$IPREX"|head -1)
 DNSIP="Get $HOST DNS Failed."
+DNSTEST=$(ping -4 -c1 -W1 $HOST 2>&1|grep -Eo "$IPREX"|head -1)
 if echo $DNSTEST|grep -Eqo "$IPREX";then
 	DNSIP=$DNSTEST
+	else
+		DNSTEST=$(nslookup $HOST 2>&1|grep -Eo "$IPREX"|tail -1)
+		if echo $DNSTEST|grep -Eqo "$IPREX";then
+		DNSIP=$DNSTEST
+		else
+			DNSTEST=$(curl -4kvs $HOST -m 1 2>&1|grep -Eo "$IPREX"|head -1)
+			if echo $DNSTEST|grep -Eqo "$IPREX";then
+			DNSIP=$DNSTEST
+			else
+				DNSTEST=$(wget --spider -T1 -t1 $HOST 2>&1|grep -Eo "$IPREX"|head -1)
+				if echo $DNSTEST|grep -Eqo "$IPREX";then
+				DNSIP=$DNSTEST
+				fi
+			fi
+		fi
 fi
 echo "[DNS IP]:$DNSIP"
 if [ "$DNSIP" == "$DEVIP" ];then
