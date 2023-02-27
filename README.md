@@ -1,6 +1,6 @@
 # Dnspod-DDNS-with-BashShell
 利用Dnspod的API和shell脚本搭建自己的动态域名服务。如果你使用这个脚本，建议点watch以获取更新通知。  
-本脚本测试适用于大部分sh和bash环境，仅依赖curl命令，对大多数系统来说都是开箱即用。如有兼容性问题欢迎提出issue。  
+本脚本测试适用于大部分shell环境，脚本兼容sh和bash或者大多数shell，仅依赖curl命令，对大多数系统来说都是开箱即用。如有兼容性问题欢迎提出issue。   
 
 ## 使用方法
 本脚本分为两个版本，一个是获取自己外网ip的版本dnspod_ddns.sh，一个是直接获取自己网卡设备上的ip的版本dnspod_ddns_line.sh（对于多拨或者路由器网关用户适用）。
@@ -27,10 +27,11 @@ OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。�
 - 假设脚本已经填写好参数并加了可执行权限（`chmod +x ./dnspod_ddns.sh`），并位于`/root/dnspod_ddns.sh`:  
 新建计划任务输入`crontab -e`  
 按a进入编辑模式，输入   
- `*/10 * * * * /root/dnspod_ddns.sh &> /dev/null`   
+ `*/10 * * * * /root/dnspod_ddns.sh 2>&1 /dev/null`   
 意思是每隔10分钟执行/root/dnspod_ddns.sh并屏蔽输出日志。当然，如果你需要记录日志可以直接重定向至保存路径。 
 然后按Esc，输入:wq回车保存退出即可。  
 更多关于Crontab的使用方法此处不再详述。  
+- 脚本兼容sh和bash或者大多数shell，不确定shell的可以执行加可执行权限用默认解析器执行，或者你可以尝试`sh dnspod_ddns.sh`或者`bash dnspod_ddns.sh`执行。
 - 另外对于一些带有Web管理界面嵌入式系统（比如群晖），有图形化的计划任务菜单管理，可以直接把脚本粘贴进去。  
 - 部分系统(比如openwrt)有热插拔接口(hotplug)，把脚本放到hotplug目录即可实现网卡IP变动后触发执行脚本，按需运行。  
 以openwrt为例，复制脚本到在/etc/hotplug.d/iface目录下，重命名为`99-ddns`这样，`chmod +x 99-ddns`加上可执行权限，这样脚本就会按需执行，网卡IP变动自动触发。  
