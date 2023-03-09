@@ -14,7 +14,7 @@ CHECKURL="http://ipsu.03k.org"
 
 # INIT
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin:/opt/sbin:$PATH"
-date +"%Y-%m-%d %H:%M.%S %Z"
+date +"%Y-%m-%d %H:%M:%S %Z"
 HOST=$sub_domain.$domain
 if [ "$sub_domain" = "@" ];then
 	HOST=$domain

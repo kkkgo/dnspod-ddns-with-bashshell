@@ -1,3 +1,4 @@
+# 欢迎使用新脚本👉→ https://github.com/kkkgo/UE-DDNS  
 # Dnspod-DDNS-with-BashShell
 利用Dnspod的API和shell脚本搭建自己的动态域名服务。如果你使用这个脚本，建议点watch以获取更新通知。  
 本脚本测试适用于大部分shell环境，脚本兼容sh和bash或者大多数shell，仅依赖curl命令，对大多数系统来说都是开箱即用。如有兼容性问题欢迎提出issue。   
@@ -27,7 +28,7 @@ OUT|指定使用某个网卡设备进行联网通信（默认被注释掉）。�
 - 假设脚本已经填写好参数并加了可执行权限（`chmod +x ./dnspod_ddns.sh`），并位于`/root/dnspod_ddns.sh`:  
 新建计划任务输入`crontab -e`  
 按a进入编辑模式，输入   
- `*/10 * * * * /root/dnspod_ddns.sh 2>&1 /dev/null`   
+ `*/10 * * * * /root/dnspod_ddns.sh &>/dev/null`   
 意思是每隔10分钟执行/root/dnspod_ddns.sh并屏蔽输出日志。当然，如果你需要记录日志可以直接重定向至保存路径。 
 然后按Esc，输入:wq回车保存退出即可。  
 更多关于Crontab的使用方法此处不再详述。  
